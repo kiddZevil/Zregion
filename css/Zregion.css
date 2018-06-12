@@ -42,6 +42,8 @@ a {
 .z-region-box {
     width: 100%;
     display: none;
+    position: absolute;
+    background: #fff;
 }
 
 .z-region-box .select-tab {
@@ -55,6 +57,7 @@ a {
     border: 1px solid #ddd;
     background: #efefef;
     text-align: center;
+    cursor: pointer;
 }
 .z-region-box .select-tab>div.on {
 
@@ -88,6 +91,7 @@ a {
 .z-region-box .select-places>li {
     padding: 8px;
     float: left;
+    cursor: pointer;
 }
 .z-region-box .select-places>li.on {
     background: #ddd;

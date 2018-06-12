@@ -10,7 +10,6 @@
      * con,
      */
     var Zregion = window.Zregion = function (options) {
-        console.log(this);
         this.options = options;
         this.init();
     };
@@ -24,10 +23,45 @@
             type: "text/css",
             href: that.options.url + '/css/Zregion.css'
         });
-        var thisId = _loadLabel(that.el);
+        _loadLabel(that.el);
+        _loadLabel(that.el, 'input', {
+            name: 'placeIds',
+            val: ''
+        });
+        if (this.options.val && this.options.val != '') {
+            _loadLabel(that.el, 'input', {
+                name: 'placeIds',
+                val: '12,123,1234'
+            });
+
+            _paramSplit(that, 'span');
+        };
         _bind(that)
     };
-    _bind = function (that) {
+    var _paramSplit = function (that, option) {
+        var $input = that.el.find('.z-region-input');
+        var $hidden = that.el.find('[name="placeIds"]');
+        if (option == 'span') {
+            var $hiddenArr = $hidden.val().split(',');
+            for (var q=0;q<$hiddenArr.length;q++) {
+                var j = q+1;
+                if(j<$hiddenArr.length){
+                    _loadLabel($input, 'span', {
+                        val: idArr[q],
+                        txt: nmArr[j]
+                    });
+                }    
+            }
+        } else if (option == 'input') {
+            var $allspans = $input.find('span');
+            var _val = '';
+            for (var i = 0; i < $allspans.length; i++) {
+                _val = _val == '' ? ($($allspans[i]).data('id') + ',' + $($allspans[i]).text()) : (_val + ','+$($allspans[i]).data('id') + ',' + $($allspans[i]).text());
+            }
+            $hidden.val(_val);
+        }
+    };
+    var _bind = function (that) {
         that.el.on('click', '.z-region-input', function () {
             that.el.find('.z-region-box').show();
             that.el.find('.select-places').html('');
@@ -53,7 +87,10 @@
                 val: dataVal,
                 txt: dataTxt
             });
+            _paramSplit(that, 'input');
             _renderPlaces(that);
+
+
         });
         that.el.on('click', '.places-tab', function () {
             var thisPlace = $(this).data('place');
@@ -62,7 +99,7 @@
         });
 
     };
-    _visibility = function (that, option) {
+    var _visibility = function (that, option) {
         switch (option) {
             case 'porvince':
                 that.el.find('.places-tab').removeClass('on');
@@ -88,7 +125,7 @@
                 break;
         }
     };
-    _renderPlaces = function (that) {
+    var _renderPlaces = function (that) {
         that.el.find('.ul-porvince').html('');
         that.el.find('.ul-city').html('');
         that.el.find('.ul-area').html('');
@@ -99,7 +136,7 @@
         for (var i = 0; i < spans.length; i++) {
             levels.push($(spans[i]).data('id'));
         }
-        _ajax(that.options.url+'/data/region.json',function(porvinces){
+        _ajax(that.options.url + '/data/region.json', function (porvinces) {
             for (x in porvinces) {
                 _loadLabel(that.el.find('.ul-porvince'), 'porvinces', porvinces[x]);
             }
@@ -109,47 +146,47 @@
             } else if (levels.length > 0) {
                 //change tab to citys
                 _visibility(that, 'city');
-    
+
                 var thisporvince = that.el.find('.ul-porvince');
                 thisporvince.find('.val-' + levels[0]).addClass('on');
                 //get all citys
-                _ajax(that.options.url+'/data/'+levels[0]+'.json',function(citys){
+                _ajax(that.options.url + '/data/' + levels[0] + '.json', function (citys) {
                     for (y in citys) {
                         _loadLabel(that.el.find('.ul-city'), 'citys', citys[y]);
                     }
-    
+
                     if (levels.length > 1) {
-    
+
                         //change tab to areas
                         _visibility(that, 'area');
-        
+
                         var thiscity = that.el.find('.ul-city');
                         thiscity.find('.val-' + levels[1]).addClass('on');
-        
+
                         //get all areas
                         debugger
                         var areas = JSON.parse(decodeURIComponent(thiscity.find('.val-' + levels[1]).data('areas')));
                         for (z in areas) {
                             _loadLabel(that.el.find('.ul-area'), 'areas', areas[z]);
                         }
-        
+
                         if (levels.length > 2) {
                             var thisarea = that.el.find('.ul-area');
                             thisarea.find('.val-' + levels[2]).addClass('on');
                         }
-        
+
                     }
-    
-    
+
+
                 });
                 // for (y in citys) {
                 //     _loadLabel(that.el.find('.ul-city'), 'citys', citys[y]);
                 // }
-    
-               
+
+
             }
         });
-        
+
     };
     // data:{dataid,value}
     // get labels
@@ -158,6 +195,7 @@
         switch (el) {
             case 'input':
                 labels = '<input type="hidden" name="' + params.name + '" value="' + params.val + '"/>';
+                break;
             case 'span':
                 labels = '<span data-id="' + params.val + '" class="z-region-place">' + params.txt + '</span>';
                 break;
@@ -171,7 +209,7 @@
                 labels = '<li class="li-places val-' + params.val + '" data-id="' + params.val + '">' + params.txt + '</li>';
                 break;
             default:
-                labels = '<div class="z-region"><div class="z-region-input"><i class="z-region-triangle triangle-down"></i></div><div class="z-region-box"><div class="select-tab"><div class="places-tab z-porvince" data-place="porvince">省份</div><div class="places-tab z-city" data-place="city">城市</div><div class="places-tab z-area" data-place="area">县区</div></div><div class="z-all-places"><ul class="select-places ul-porvince"></ul><ul class="select-places ul-city"></ul><ul class="select-places ul-area"></ul></div></div></div>';
+                labels = '<div class="z-region"><div class="z-region-input"><i class="z-region-triangle triangle-down"></i></div><div style="display:none;" class="z-region-box"><div class="select-tab"><div class="places-tab z-porvince" data-place="porvince">省份</div><div class="places-tab z-city" data-place="city">城市</div><div class="places-tab z-area" data-place="area">县区</div></div><div class="z-all-places"><ul class="select-places ul-porvince"></ul><ul class="select-places ul-city"></ul><ul class="select-places ul-area"></ul></div></div></div>';
                 break;
         };
         parent.append(labels);
@@ -191,7 +229,7 @@
             data: {},
             success: callback,
             dataType: 'json',
-            error:function(){
+            error: function () {
                 console.log('加载地区信息失败！')
             }
         });
