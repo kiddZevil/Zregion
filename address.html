@@ -2,106 +2,7 @@
 	<meta charset="UTF-8">
 	<title>javascript组件--region</title>
 	<style>
-		.z-region {
-			width: 300px;
-			position: relative;
-			font-size: 12px;
-		}
-
-		.z-region li,
-		ol,
-		a {
-			list-style: none;
-		}
-
-		.z-region .z-region-input {
-			position: relative;
-			border: 1px solid #ddd;
-			height: 30px;
-			width: 100%;
-			line-height: 30px;
-		}
-
-		.z-region .z-region-input span {
-			margin-left: 14px;
-		}
-
-		.z-region-place {}
-
-		.z-region-triangle {
-			position: absolute;
-			right: 12px;
-			top: 12px;
-			width: 0;
-			height: 0;
-			border-width: 6px;
-			border-style: solid;
-			border-color: #000 transparent transparent transparent;
-		}
-
-		.z-region-triangle.triangle-up {
-			border-color: transparent transparent #000 transparent;
-		}
-
-		.z-region-box {
-			width: 100%;
-			display: none;
-		}
-
-		.z-region-box .select-tab {
-			display: table;
-			width: 100%;
-		}
-
-		.z-region-box .select-tab>div {
-			display: table-cell;
-			line-height: 38px;
-			border: 1px solid #ddd;
-			background: #efefef;
-			text-align: center;
-		}
-		.z-region-box .select-tab>div.on {
 	
-			border-bottom: 1px solid #fff;
-			color: #2233ff;
-			background: #fff;
-	
-		}
-		.z-region-box .select-places {
-			margin: 0;
-			width: 100%;
-			border-left: 1px solid #ddd;
-			border-right: 1px solid #ddd;
-			border-bottom: 1px solid #ddd;
-			padding: 10px;
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			/* Firefox */
-			-webkit-box-sizing: border-box;
-			/* Safari */
-		}
-
-		.z-region-box .select-places:after {
-			clear: both;
-			visibility: hidden;
-			height: 0;
-			content: " ";
-			display: block;
-		}
-
-		.z-region-box .select-places>li {
-			padding: 8px;
-			float: left;
-		}
-		.z-region-box .select-places>li.on {
-			background: #ddd;
-		}
-
-		/* .z-region-box{border-left:1px solid #ddd;border-right:1px solid #ddd;border-bottom:1px solid #ddd;width:100%;max-height:400px;}
-		.z-region-box:after{clear: both;visibility: hidden;height: 0;content: " ";display: block; }
-		.z-region-box .select-tab{width:100%;white-space: nowrap;}
-		.z-region-box .select-tab>div{width:33.3%;line-height: 38px;border-right:1px solid #ddd;background: #efefef;text-align: center;display: inline-block;}
-		.z-region-box .select-tab>div:last-child{border-right:0;} */
 	</style>
 </head>
 
@@ -118,7 +19,7 @@
 
 			new Zregion({
 				con: '#region',
-				json: ''
+				url: 'file:///D:/英雄时刻/region'
 			});
 		}
 	</script>

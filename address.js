@@ -99,47 +99,57 @@
         for (var i = 0; i < spans.length; i++) {
             levels.push($(spans[i]).data('id'));
         }
-        var porvinces = _ajax('porvince');
-        for (x in porvinces) {
-            _loadLabel(that.el.find('.ul-porvince'), 'porvinces', porvinces[x]);
-        }
-        if (levels.length == 0) {
-            //change tab to porvinces
-            _visibility(that, 'porvince');
-        } else if (levels.length > 0) {
-            //change tab to citys
-            _visibility(that, 'city');
-
-            var thisporvince = that.el.find('.ul-porvince');
-            thisporvince.find('.val-' + levels[0]).addClass('on');
-            //get all citys
-            var citys = _ajax('city');
-            for (y in citys) {
-                _loadLabel(that.el.find('.ul-city'), 'citys', citys[y]);
+        _ajax(that.options.url+'/data/region.json',function(porvinces){
+            for (x in porvinces) {
+                _loadLabel(that.el.find('.ul-porvince'), 'porvinces', porvinces[x]);
             }
-
-            if (levels.length > 1) {
-
-                //change tab to areas
-                _visibility(that, 'area');
-
-                var thiscity = that.el.find('.ul-city');
-                thiscity.find('.val-' + levels[1]).addClass('on');
-
-                //get all areas
-                debugger
-                var areas = JSON.parse(decodeURIComponent(thiscity.find('.val-' + levels[1]).data('areas')));
-                for (z in areas) {
-                    _loadLabel(that.el.find('.ul-area'), 'areas', areas[z]);
-                }
-
-                if (levels.length > 2) {
-                    var thisarea = that.el.find('.ul-area');
-                    thisarea.find('.val-' + levels[2]).addClass('on');
-                }
-
+            if (levels.length == 0) {
+                //change tab to porvinces
+                _visibility(that, 'porvince');
+            } else if (levels.length > 0) {
+                //change tab to citys
+                _visibility(that, 'city');
+    
+                var thisporvince = that.el.find('.ul-porvince');
+                thisporvince.find('.val-' + levels[0]).addClass('on');
+                //get all citys
+                _ajax(that.options.url+'/data/'+levels[0]+'.json',function(citys){
+                    for (y in citys) {
+                        _loadLabel(that.el.find('.ul-city'), 'citys', citys[y]);
+                    }
+    
+                    if (levels.length > 1) {
+    
+                        //change tab to areas
+                        _visibility(that, 'area');
+        
+                        var thiscity = that.el.find('.ul-city');
+                        thiscity.find('.val-' + levels[1]).addClass('on');
+        
+                        //get all areas
+                        debugger
+                        var areas = JSON.parse(decodeURIComponent(thiscity.find('.val-' + levels[1]).data('areas')));
+                        for (z in areas) {
+                            _loadLabel(that.el.find('.ul-area'), 'areas', areas[z]);
+                        }
+        
+                        if (levels.length > 2) {
+                            var thisarea = that.el.find('.ul-area');
+                            thisarea.find('.val-' + levels[2]).addClass('on');
+                        }
+        
+                    }
+    
+    
+                });
+                // for (y in citys) {
+                //     _loadLabel(that.el.find('.ul-city'), 'citys', citys[y]);
+                // }
+    
+               
             }
-        }
+        });
+        
     };
     // data:{dataid,value}
     // get labels
